@@ -3,7 +3,9 @@ package com.kevin.microservices.cliente_microservice.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -12,6 +14,8 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "cliente")
 public class Cliente {
     @Id
@@ -47,7 +51,7 @@ public class Cliente {
     private String ciudad;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "fecha_creacion")
+    @Column(name = "fecha_creacion", insertable = false, updatable = false)
     private Instant fechaCreacion;
 
 

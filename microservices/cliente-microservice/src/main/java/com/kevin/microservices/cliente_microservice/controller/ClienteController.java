@@ -27,19 +27,19 @@ public class ClienteController {
     }
 
     @GetMapping("/list/{id}")
-    public ClienteDto listaIdDto(@PathVariable int id) {
+    public ClienteDto listaIdDto(@PathVariable long id) {
         return clienteService.listaId(id);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> actualizar(@PathVariable int id,
+    public ResponseEntity<String> actualizar(@PathVariable long id,
                                              @RequestBody ClienteDto dto) {
         clienteService.editar(id, dto);
         return ResponseEntity.ok("Cliente Actualizado");
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> eliminar(@PathVariable int id) {
+    public ResponseEntity<String> eliminar(@PathVariable long id) {
         clienteService.borrar(id);
         return ResponseEntity.ok("Cliente Eliminado");
     }

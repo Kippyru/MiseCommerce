@@ -24,19 +24,19 @@ public class ClienteService {
         List<Cliente> clienteList = clienteRepository.findAll();
         return clienteMapper.toList(clienteList);
     }
-    public ClienteDto listaId(int id) {
+    public ClienteDto listaId(long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fallo al buscar cliente: cliente no encontrado"));
         return clienteMapper.toDto(cliente);
     }
-    public ClienteDto editar(int id, ClienteDto dto) {
+    public ClienteDto editar(long id, ClienteDto dto) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Fallo al editar cliente: cliente no encontrado"));
         clienteMapper.updateCliente(dto, cliente);
         Cliente update = clienteRepository.save(cliente);
         return clienteMapper.toDto(update);
     }
-    public void borrar(int id) {
+    public void borrar(long id) {
         if(!clienteRepository.existsById(id)) {
             throw new RuntimeException("Fallo al borrar cliente: cliente no encontrado");
         }
