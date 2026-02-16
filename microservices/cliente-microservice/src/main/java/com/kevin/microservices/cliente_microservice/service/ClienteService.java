@@ -1,6 +1,7 @@
 package com.kevin.microservices.cliente_microservice.service;
 
 import com.kevin.microservices.cliente_microservice.dto.ClienteDto;
+import com.kevin.microservices.cliente_microservice.handlers.ClienteNotFoundException;
 import com.kevin.microservices.cliente_microservice.mapper.ClienteMapper;
 import com.kevin.microservices.cliente_microservice.model.Cliente;
 import com.kevin.microservices.cliente_microservice.repository.ClienteRepository;
@@ -26,19 +27,19 @@ public class ClienteService {
     }
     public ClienteDto listaId(long id) {
         Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Fallo al buscar cliente: cliente no encontrado"));
+                .orElseThrow(() -> new ClienteNotFoundException(String.format("Fallo al buscar cliente: cliente %d no encontrado", id)));
         return clienteMapper.toDto(cliente);
     }
     public ClienteDto editar(long id, ClienteDto dto) {
         Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Fallo al editar cliente: cliente no encontrado"));
+                .orElseThrow(() -> new ClienteNotFoundException(String.format("Fallo al editar cliente: cliente %d no encontrado", id)));
         clienteMapper.updateCliente(dto, cliente);
         Cliente update = clienteRepository.save(cliente);
         return clienteMapper.toDto(update);
     }
     public void borrar(long id) {
         if(!clienteRepository.existsById(id)) {
-            throw new RuntimeException("Fallo al borrar cliente: cliente no encontrado");
+            throw new ClienteNotFoundException(String.format("Fallo al borrar cliente: cliente &d no encontrado", id));
         }
         clienteRepository.deleteById(id);
     }

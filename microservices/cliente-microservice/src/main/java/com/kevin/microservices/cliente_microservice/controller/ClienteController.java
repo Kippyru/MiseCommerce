@@ -2,6 +2,7 @@ package com.kevin.microservices.cliente_microservice.controller;
 
 import com.kevin.microservices.cliente_microservice.dto.ClienteDto;
 import com.kevin.microservices.cliente_microservice.service.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping("/crear")
-    public ResponseEntity<String> crear(@RequestBody ClienteDto dto) {
+    public ResponseEntity<String> crear(@Valid @RequestBody ClienteDto dto) {
         clienteService.crear(dto);
         return ResponseEntity.ok("Cliente Creado");
     }
@@ -32,7 +33,7 @@ public class ClienteController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> actualizar(@PathVariable long id,
+    public ResponseEntity<String> actualizar(@Valid @PathVariable long id,
                                              @RequestBody ClienteDto dto) {
         clienteService.editar(id, dto);
         return ResponseEntity.ok("Cliente Actualizado");

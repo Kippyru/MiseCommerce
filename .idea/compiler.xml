@@ -12,14 +12,16 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.7.0.Beta1/mapstruct-processor-1.7.0.Beta1.jar" />
         </processorPath>
         <module name="config-server" />
-        <module name="cliente-microservice" />
         <module name="discovery-server" />
+        <module name="common-exceptions" />
+        <module name="cliente-microservice" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="cliente-microservice" options="-parameters" />
+      <module name="common-exceptions" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
       <module name="microservices" options="-parameters" />
