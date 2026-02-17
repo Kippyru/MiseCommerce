@@ -1,5 +1,6 @@
 package com.kevin.microservices.common_exceptions;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -12,13 +13,15 @@ import java.util.HashMap;
 
 @Component
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception exception) {
         var errors = new HashMap<String, String>();
         var fieldName = "mensaje";
-        var errorMessage = "Error, contactese con el Administrador.";
+        var errorMessage = "Error, contactese con el Administrador o intente nuevamente.";
         errors.put(fieldName, errorMessage);
+        log.error("Error: {}", exception.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errors));
     }
 
@@ -30,6 +33,7 @@ public class GlobalExceptionHandler {
             var errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
+        log.warn("Error de validacion: {}", exception.toString());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errors));
     }
 }
