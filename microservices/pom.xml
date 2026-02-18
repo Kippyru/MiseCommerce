@@ -16,6 +16,7 @@
     <modules>
         <module>cliente-microservice</module>
         <module>common-exceptions</module>
+        <module>producto-microservice</module>
     </modules>
 
     <properties>
