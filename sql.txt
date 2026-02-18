@@ -8,3 +8,27 @@ CREATE TABLE cliente (
     ciudad VARCHAR(100),
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE categoria (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(255)
+);
+
+CREATE TABLE producto (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion VARCHAR(255),
+    precio DOUBLE NOT NULL,
+    stock INT NOT NULL,
+    imagen_url VARCHAR(255),
+
+    categoria_id BIGINT NOT NULL,
+
+    CONSTRAINT fk_product_categoria
+        FOREIGN KEY (categoria_id)
+        REFERENCES categoria(id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+);
+
