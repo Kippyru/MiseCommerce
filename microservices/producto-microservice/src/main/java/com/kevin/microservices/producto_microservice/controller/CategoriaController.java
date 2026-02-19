@@ -10,12 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categoria")
-public class Categoria {
+public class CategoriaController {
 
     @Autowired
     private CategoriaService service;
 
-    @PostMapping("/crear")
+    @PostMapping("/create")
     public ResponseEntity<String> crear(@RequestBody CategoriaDto dto) {
         service.crear(dto);
         return ResponseEntity.ok("Categoria Creada");

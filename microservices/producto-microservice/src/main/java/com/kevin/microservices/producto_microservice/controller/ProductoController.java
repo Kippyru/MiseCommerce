@@ -10,12 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/producto")
-public class Producto {
+public class ProductoController {
 
     @Autowired
     private ProductoService service;
 
-    @PostMapping("/crear")
+    @PostMapping("/create")
     public ResponseEntity<String> crear(@RequestBody ProductoDto dto) {
         service.crear(dto);
         return ResponseEntity.ok("Producto Creado");
