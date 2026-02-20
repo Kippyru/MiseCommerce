@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 
-@RestControllerAdvice(basePackages = "com.kevin.microservices.producto-microservice")
+@RestControllerAdvice(basePackages = "com.kevin.microservices.producto_microservice")
 @Primary
 @Slf4j
 public class ProductoExceptionHandler extends GlobalExceptionHandler {
