@@ -2,6 +2,7 @@ package com.kevin.microservices.producto_microservice.controller;
 
 import com.kevin.microservices.producto_microservice.dto.CategoriaDto;
 import com.kevin.microservices.producto_microservice.service.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class CategoriaController {
     private CategoriaService service;
 
     @PostMapping("/create")
-    public ResponseEntity<String> crear(@RequestBody CategoriaDto dto) {
+    public ResponseEntity<String> crear(@Valid @RequestBody CategoriaDto dto) {
         service.crear(dto);
         return ResponseEntity.ok("Categoria Creada");
     }
@@ -32,7 +33,7 @@ public class CategoriaController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> actualizar(@PathVariable long id,
+    public ResponseEntity<String> actualizar(@Valid @PathVariable long id,
                                              @RequestBody CategoriaDto dto) {
         service.editar(id, dto);
         return ResponseEntity.ok("Categoria Actualizada");
