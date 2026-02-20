@@ -1,6 +1,7 @@
 package com.kevin.microservices.producto_microservice.service;
 
 import com.kevin.microservices.producto_microservice.dto.CategoriaDto;
+import com.kevin.microservices.producto_microservice.exceptions.CategoriaException;
 import com.kevin.microservices.producto_microservice.mapper.CategoriaMapper;
 import com.kevin.microservices.producto_microservice.model.Categoria;
 import com.kevin.microservices.producto_microservice.repository.CategoriaRepository;
@@ -26,22 +27,24 @@ public class CategoriaService {
         return mapper.toList(categoriaList);
     }
 
-    public CategoriaDto listaId(long id) {
+    public CategoriaDto listaId(Long id) {
         Categoria categoria = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException(String.format("Fallo al buscar Categoria: categoria %d no encontrado", id)));
+                .orElseThrow(() -> new CategoriaException(String.format("Fallo al buscar Categoria: categoria %d no encontrado", id)));
         return mapper.toDto(categoria);
     }
 
     public CategoriaDto editar(long id, CategoriaDto dto) {
         Categoria categoria = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException(String.format("Fallo al editar Categoria: categoria %d no encontrado", id)));
+                .orElseThrow(() -> new CategoriaException(String.format("Fallo al editar Categoria: categoria %d no encontrado", id)));
         mapper.updateCategoria(dto, categoria);
         Categoria update = repo.save(categoria);
         return mapper.toDto(update);
     }
-    public void borrar(long id) {
-        if (!repo.existsById(id)) {
-            throw new RuntimeException(String.format("Fallo al borrar Categoria: categoria &d no encontrado", id));
+    public void borrar(Long id) {
+        if (id == null) {
+            throw new CategoriaException("Se necesita un ID");
+        } else if (!repo.existsById(id)) {
+            throw new CategoriaException(String.format("Fallo al borrar Categoria: categoria &d no encontrado", id));
         }
         repo.deleteById(id);
     }

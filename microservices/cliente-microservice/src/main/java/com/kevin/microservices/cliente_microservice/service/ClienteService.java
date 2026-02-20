@@ -25,20 +25,22 @@ public class ClienteService {
         List<Cliente> clienteList = clienteRepository.findAll();
         return clienteMapper.toList(clienteList);
     }
-    public ClienteDto listaId(long id) {
+    public ClienteDto listaId(Long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException(String.format("Fallo al buscar cliente: cliente %d no encontrado", id)));
         return clienteMapper.toDto(cliente);
     }
-    public ClienteDto editar(long id, ClienteDto dto) {
+    public ClienteDto editar(Long id, ClienteDto dto) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException(String.format("Fallo al editar cliente: cliente %d no encontrado", id)));
         clienteMapper.updateCliente(dto, cliente);
         Cliente update = clienteRepository.save(cliente);
         return clienteMapper.toDto(update);
     }
-    public void borrar(long id) {
-        if(!clienteRepository.existsById(id)) {
+    public void borrar(Long id) {
+        if (id == null) {
+            throw new ClienteNotFoundException("Se necesita un ID");
+        }else if(!clienteRepository.existsById(id)) {
             throw new ClienteNotFoundException(String.format("Fallo al borrar cliente: cliente &d no encontrado", id));
         }
         clienteRepository.deleteById(id);
