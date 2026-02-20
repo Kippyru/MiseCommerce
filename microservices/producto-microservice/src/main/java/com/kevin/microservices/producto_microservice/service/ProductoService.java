@@ -1,11 +1,14 @@
 package com.kevin.microservices.producto_microservice.service;
 
+import com.kevin.microservices.producto_microservice.dto.ProductoCantidadDto;
 import com.kevin.microservices.producto_microservice.dto.ProductoDto;
 import com.kevin.microservices.producto_microservice.exceptions.CategoriaException;
 import com.kevin.microservices.producto_microservice.exceptions.ProductoException;
 import com.kevin.microservices.producto_microservice.mapper.ProductoMapper;
 import com.kevin.microservices.producto_microservice.model.Producto;
 import com.kevin.microservices.producto_microservice.repository.ProductoRepository;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +49,49 @@ public class ProductoService {
         }
         repo.deleteById(id);
     }
+    @Transactional
+    public void comprarProducto(List<ProductoCantidadDto> items) {
 
+        for (ProductoCantidadDto item : items) {
+
+            Producto producto = repo.findById(item.getProductoId())
+                    .orElseThrow(() -> new ProductoException(
+                            "Producto no encontrado: " + item.getProductoId()
+                    ));
+
+            int stockActual = producto.getStock();
+            int cantidad = item.getCantidad();
+
+            if (cantidad <= 0) {
+                throw new ProductoException("Cantidad inválida para el producto " + producto.getId());
+            }
+
+            if (stockActual < cantidad) {
+                throw new ProductoException(
+                        "Stock insuficiente para el producto " + producto.getNombre()
+                );
+            }
+
+            producto.setStock(stockActual - cantidad);
+        }
+    }
+
+    @Transactional
+    public void actualizarStockProducto(List<ProductoCantidadDto> items) {
+        for (ProductoCantidadDto item : items) {
+
+            Producto producto = repo.findById(item.getProductoId())
+                    .orElseThrow(() -> new ProductoException(
+                            "Producto no encontrado: " + item.getProductoId()
+                    ));
+
+            int cantidad = item.getCantidad();
+
+            if (cantidad <= 0) {
+                throw new ProductoException("Cantidad inválida para restock");
+            }
+
+            producto.setStock(producto.getStock() + cantidad);
+        }
+    }
 }
