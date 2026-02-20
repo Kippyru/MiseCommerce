@@ -44,5 +44,10 @@ public class Producto {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
-
+    @PrePersist
+    public void prePersist() {
+        if (stock == null) {
+            stock = 0;
+        }
+    }
 }
