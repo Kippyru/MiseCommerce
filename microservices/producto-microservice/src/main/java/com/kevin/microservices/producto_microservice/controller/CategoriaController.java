@@ -33,8 +33,8 @@ public class CategoriaController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> actualizar(@Valid @PathVariable long id,
-                                             @RequestBody CategoriaDto dto) {
+    public ResponseEntity<String> actualizar(@PathVariable long id,
+                                             @Valid @RequestBody CategoriaDto dto) {
         service.editar(id, dto);
         return ResponseEntity.ok("Categoria Actualizada");
     }

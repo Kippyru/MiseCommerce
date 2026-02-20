@@ -33,8 +33,8 @@ public class ClienteController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> actualizar(@Valid @PathVariable long id,
-                                             @RequestBody ClienteDto dto) {
+    public ResponseEntity<String> actualizar(@PathVariable long id,
+                                             @Valid @RequestBody ClienteDto dto) {
         clienteService.editar(id, dto);
         return ResponseEntity.ok("Cliente Actualizado");
     }
