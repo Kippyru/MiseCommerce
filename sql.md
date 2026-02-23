@@ -32,3 +32,19 @@ CREATE TABLE producto (
         ON UPDATE CASCADE
 );
 
+CREATE TABLE carrito (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+cliente_id VARCHAR(100) NOT NULL,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE carrito_item (
+id BIGINT AUTO_INCREMENT PRIMARY KEY,
+cart_id BIGINT NOT NULL,
+product_id BIGINT NOT NULL,
+quantity INT NOT NULL DEFAULT 1,
+
+    CONSTRAINT fk_carrito_item_cart
+        FOREIGN KEY (carrito_id) REFERENCES carrito(id)
+        ON DELETE CASCADE
+);
