@@ -32,6 +32,4 @@ public class CarritoItem {
     @ColumnDefault("1")
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
-
-
 }
