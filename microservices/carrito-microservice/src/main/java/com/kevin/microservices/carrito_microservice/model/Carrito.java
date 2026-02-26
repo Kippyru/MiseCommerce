@@ -1,5 +1,6 @@
 package com.kevin.microservices.carrito_microservice.model;
 
+import com.kevin.microservices.carrito_microservice.dto.CarritoItemDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,4 +29,6 @@ public class Carrito {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", insertable = false, updatable = false)
     private Instant createdAt;
+
+    private List<CarritoItem> items;
 }
