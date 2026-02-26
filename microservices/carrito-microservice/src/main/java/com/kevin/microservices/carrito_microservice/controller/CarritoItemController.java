@@ -18,5 +18,16 @@ public class CarritoItemController {
         return ResponseEntity.ok(carritoItemService.addItem(clienteId, Item));
     }
 
+    @PutMapping()
+    public ResponseEntity<Void> updateItem(@PathVariable("clienteId") String clienteId, @Valid @RequestBody CarritoItemDto item) {
+        carritoItemService.updateItem(clienteId, item);
+        return ResponseEntity.accepted().build();
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteItem(@PathVariable("clienteId") String clienteId, @PathVariable("productId") Long productId) {
+        carritoItemService.deleteItem(clienteId, productId);
+        return ResponseEntity.accepted().build();
+    }
 
 }

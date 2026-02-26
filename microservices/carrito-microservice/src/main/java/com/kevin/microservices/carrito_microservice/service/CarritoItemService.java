@@ -56,4 +56,35 @@ public class CarritoItemService {
 
         return "Item agregado al carrito";
     }
+
+    public void updateItem(String clienteId, @Valid CarritoItemDto itemDto) {
+        Carrito carrito = carritoRepository.findByClienteId(clienteId)
+                .orElseThrow(() -> new RuntimeException(String.format("No se encontro el carrito del cliente id: {}", clienteId)));
+
+        CarritoItem itemUpdate = carrito.getItems().stream()
+                .filter(item -> item.getProductId() == itemDto.productId())
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("El producto no se encuentra en el carrito"));
+
+        if (productoClient.listaIdDto(itemDto.productId()).get().stock() < itemDto.cantidad()) {
+            throw new RuntimeException("No hay suficiente stock del producto seleccionado");
+        }
+
+        itemUpdate.setCantidad(itemDto.cantidad());
+
+        carritoRepository.save(carrito);
+    }
+
+    public void deleteItem(String clienteId, Long productId) {
+        Carrito carrito = carritoRepository.findByClienteId(clienteId)
+                .orElseThrow(() -> new RuntimeException(String.format("No se encontro el carrito del cliente id: {}", clienteId)));
+
+        CarritoItem removeItem = carrito.getItems().stream()
+                .filter(item -> item.getProductId() == productId)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No existe stock del producto seleccionado"));
+
+        carrito.getItems().remove(removeItem);
+        carritoRepository.save(carrito);
+    }
 }
