@@ -15,18 +15,15 @@ public class CarritoService {
     @Autowired
     private CarritoRepository repo;
 
-    public CarritoDto listaId(Long clienteId) {
-        Carrito carrito = repo.findById(clienteId)
+    public CarritoDto listaId(String clienteId) {
+        Carrito carrito = repo.findByClienteId(clienteId)
                 .orElseThrow(() -> new RuntimeException("No se encontro el carrito"));
-        return carritoMapper.toDto(carrito);
+        return carritoMapper.toCartResponse(carrito);
     }
 
     public void borrar(String clienteId) {
-        if (clienteId == null) {
-            throw new RuntimeException("Se necesita un id");
-        }else if (!repo.existsById(Long.parseLong(clienteId))) {
-            throw new RuntimeException(String.format("No se pudo borrar el carrito del cliente id: {}", clienteId));
-        }
-        repo.deleteById(Long.parseLong(clienteId));
+        Carrito carrito = repo.findByClienteId(clienteId)
+                .orElseThrow(() -> new RuntimeException(String.format("No se pudo borrar el carrito del cliente id: " + clienteId)));
+        repo.delete(carrito);
     }
 }

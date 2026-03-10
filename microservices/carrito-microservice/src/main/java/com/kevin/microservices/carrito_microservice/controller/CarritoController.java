@@ -7,14 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/carrito/{clienteId}/cart")
+@RequestMapping("/carrito/{clienteId}/cart") //TODO: arreglar los nombres
 public class CarritoController {
     @Autowired
     private CarritoService carritoService;
 
     @GetMapping()
     public CarritoDto listaId(@PathVariable("clienteId") String clienteId) {
-        return carritoService.listaId(Long.parseLong(clienteId));
+        return carritoService.listaId(clienteId);
     }
 
     @DeleteMapping("/borrar")
