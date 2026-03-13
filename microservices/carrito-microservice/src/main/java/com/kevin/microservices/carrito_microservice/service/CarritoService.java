@@ -1,6 +1,7 @@
 package com.kevin.microservices.carrito_microservice.service;
 
 import com.kevin.microservices.carrito_microservice.dto.CarritoDto;
+import com.kevin.microservices.carrito_microservice.exceptions.CarritoException;
 import com.kevin.microservices.carrito_microservice.mapper.CarritoMapper;
 import com.kevin.microservices.carrito_microservice.model.Carrito;
 import com.kevin.microservices.carrito_microservice.repository.CarritoRepository;
@@ -17,13 +18,13 @@ public class CarritoService {
 
     public CarritoDto listaId(String clienteId) {
         Carrito carrito = repo.findByClienteId(clienteId)
-                .orElseThrow(() -> new RuntimeException("No se encontro el carrito"));
+                .orElseThrow(() -> new CarritoException("No se encontro el carrito"));
         return carritoMapper.toCartResponse(carrito);
     }
 
     public void borrar(String clienteId) {
         Carrito carrito = repo.findByClienteId(clienteId)
-                .orElseThrow(() -> new RuntimeException(String.format("No se pudo borrar el carrito del cliente id: " + clienteId)));
+                .orElseThrow(() -> new CarritoException("No se pudo borrar el carrito del cliente id: " + clienteId));
         repo.delete(carrito);
     }
 }

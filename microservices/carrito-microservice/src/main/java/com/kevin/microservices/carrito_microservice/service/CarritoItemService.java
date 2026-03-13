@@ -3,6 +3,7 @@ package com.kevin.microservices.carrito_microservice.service;
 import com.kevin.microservices.carrito_microservice.cliente.ClienteClient;
 import com.kevin.microservices.carrito_microservice.cliente.ClienteDto;
 import com.kevin.microservices.carrito_microservice.dto.CarritoItemDto;
+import com.kevin.microservices.carrito_microservice.exceptions.CarritoException;
 import com.kevin.microservices.carrito_microservice.model.Carrito;
 import com.kevin.microservices.carrito_microservice.model.CarritoItem;
 import com.kevin.microservices.carrito_microservice.producto.ProductoClient;
@@ -23,13 +24,13 @@ public class CarritoItemService {
 
     public String addItem(String clienteId, @Valid CarritoItemDto item) {
       ClienteDto clienteDto = clienteClient.listaIdDto(Long.parseLong(clienteId))
-             .orElseThrow(() -> new RuntimeException("El cliente no existe"));
+             .orElseThrow(() -> new CarritoException("El cliente con ID: " + clienteId + " no existe"));
 
        ProductoDto productoDto = productoClient.listaIdDto(item.productId())
-               .orElseThrow(() -> new RuntimeException("El producto no existe"));
+               .orElseThrow(() -> new CarritoException("El producto con ID: " + item.productId() + " no existe"));
 
        if (productoDto.stock() < item.cantidad()) {
-            throw new RuntimeException("Stock insuficiente");
+            throw new CarritoException("El Stock del producto: " + item.productId() + " es insuficiente");
        }
 
        Carrito carrito = carritoRepository.findByClienteId(clienteId)
@@ -59,15 +60,15 @@ public class CarritoItemService {
 
     public void updateItem(String clienteId, @Valid CarritoItemDto itemDto) {
         Carrito carrito = carritoRepository.findByClienteId(clienteId)
-                .orElseThrow(() -> new RuntimeException(String.format("No se encontro el carrito del cliente id: {}", clienteId)));
+                .orElseThrow(() -> new CarritoException("No se encontro el carrito del cliente id: " + clienteId));
 
         CarritoItem itemUpdate = carrito.getItems().stream()
                 .filter(item -> item.getProductId() == itemDto.productId())
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("El producto no se encuentra en el carrito"));
+                .orElseThrow(() -> new CarritoException("El producto no se encuentra en el carrito"));
 
         if (productoClient.listaIdDto(itemDto.productId()).get().stock() < itemDto.cantidad()) {
-            throw new RuntimeException("No hay suficiente stock del producto seleccionado");
+            throw new CarritoException("No hay suficiente stock del producto seleccionado");
         }
 
         itemUpdate.setCantidad(itemDto.cantidad());
@@ -77,12 +78,12 @@ public class CarritoItemService {
 
     public void deleteItem(String clienteId, Long productId) {
         Carrito carrito = carritoRepository.findByClienteId(clienteId)
-                .orElseThrow(() -> new RuntimeException(String.format("No se encontro el carrito del cliente id: {}", clienteId)));
+                .orElseThrow(() -> new CarritoException("No se encontro el carrito del cliente id: " + clienteId));
 
         CarritoItem removeItem = carrito.getItems().stream()
                 .filter(item -> item.getProductId() == productId)
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No existe stock del producto seleccionado"));
+                .orElseThrow(() -> new CarritoException("No existe stock del producto seleccionado"));
 
         carrito.getItems().remove(removeItem);
         carritoRepository.save(carrito);
